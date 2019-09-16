@@ -1,4 +1,4 @@
-package Tailwind.Traders.Stock.Api.controller;
+package Tailwind.Traders.Stock.Api;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

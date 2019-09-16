@@ -99,8 +99,7 @@ namespace Tailwind.Traders.WebBff.Controllers
                 API.Products.GetProductsByFilter(_settings.ProductsApiUrl, VERSION_API, brand, selectedTypeIds) :
                 API.Products.GetProducts(_settings.ProductsApiUrl, VERSION_API);
 
-            var resultProducts = await client.GetAsync(productsUrl);
-            result = await resultProducts.Content.ReadAsStringAsync();
+            result = await client.GetStringAsync(productsUrl);
             var products = JsonConvert.DeserializeObject<IEnumerable<Product>>(result);
 
             result = await client.GetStringAsync(API.Products.GetBrands(_settings.ProductsApiUrl, VERSION_API));

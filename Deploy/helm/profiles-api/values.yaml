@@ -26,8 +26,7 @@ affinity: {}
 env:
   configmap:
     - name: ApplicationInsights__InstrumentationKey
-    - name: AUTHKEY
-    - name: HOST
+    - name: ConnectionString
     - name: ProfilesImageUrl
     - name: ISSUER
     - name: SECURITYKEY

@@ -1,8 +1,7 @@
-ARG sdkTag=3.0-buster
-ARG runtimeTag=3.0-buster-slim
+ARG sdkTag=2.2
+ARG runtimeTag=2.2
 ARG image=mcr.microsoft.com/dotnet/core/aspnet
 ARG sdkImage=mcr.microsoft.com/dotnet/core/sdk
-
 FROM ${image}:${runtimeTag} AS base
 WORKDIR /app
 EXPOSE 80

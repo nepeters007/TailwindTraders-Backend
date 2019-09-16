@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
 using RegistrationUserService;
 using System;
 using System.ServiceModel;
@@ -45,7 +43,8 @@ namespace Tailwind.Traders.Bff
 
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new OpenApiInfo
+                options.DescribeAllEnumsAsStrings();
+                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info
                 {
                     Title = "Tailwind Traders - Mobile BFF HTTP API",
                     Version = "v1"
@@ -59,54 +58,45 @@ namespace Tailwind.Traders.Bff
                 options.ApiVersionReader = new QueryStringApiVersionReader();
             });
 
-            services.AddControllers()
+            services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Latest);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-
-            var swaggerEndpoint = "/swagger/v1/swagger.json";
-
-            if (!string.IsNullOrEmpty(Configuration["gwPath"]))
-            {
-                swaggerEndpoint = $"/{Configuration["gwPath"]}{swaggerEndpoint}";
-            }
+            }          
 
             app.UseCors(builder =>
             {
                 builder
-                    .AllowAnyOrigin()
-                    .AllowAnyHeader()
-                    .AllowAnyMethod();
+                .AllowAnyOrigin()
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
             });
 
-            app.UseHttpsRedirection();
-
-            app.UseSwagger();
-
-            app.UseSwaggerUI(c =>
+            app.UseHealthChecks("/liveness", new HealthCheckOptions
             {
-                c.SwaggerEndpoint(swaggerEndpoint, "MobileBFF V1");
-                c.RoutePrefix = string.Empty;
+                Predicate = r => r.Name.Contains("self")
             });
 
+            app.UseHealthChecks("/readiness");
 
-            app.UseRouting();
+            app.UseSwagger()
+              .UseSwaggerUI(c =>
+              {
+                  c.SwaggerEndpoint("/swagger/v1/swagger.json", "MobileBFF V1");
+                  c.RoutePrefix = string.Empty;
+              });
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapHealthChecks("/liveness", new HealthCheckOptions() { Predicate = r => r.Name.Contains("self") });
-                endpoints.MapHealthChecks("/readiness", new HealthCheckOptions() { });
-                endpoints.MapDefaultControllerRoute();
-                endpoints.MapControllers();
-            });
+            app.UseMvc();
         }
+
+       
     }
 
     static class ServiceCollectionExtensions

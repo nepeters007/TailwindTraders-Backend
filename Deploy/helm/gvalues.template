@@ -4,33 +4,45 @@ inf:
   sa: ttsa
   db:
     products:
-      host: {{shoppinghost}}
-      auth: {{shoppingauth}}
-    profile:
-      host: {{shoppinghost}}
-      auth: {{shoppingauth}}
-    popularproducts:
-      host: {{shoppinghost}}
-      auth: {{shoppingauth}}
-    stock:
-      host: {{shoppinghost}}
-      auth: {{shoppingauth}}
-    cart:
-      host: {{shoppinghost}}
-      auth: {{shoppingauth}}
-    rewards:
-      host: {{rewardshost}}
+      host: {{dbhost}}
       port: "1433"
-      catalog: rewardsdb
-      user: {{rewardsuser}}
-      pwd: {{rewardspwd}}
+      catalog: products
+      user: {{dbuser}}
+      pwd: {{dbpwd}}
+    profile:
+      host: {{dbhost}}
+      port: "1433"
+      catalog: profile
+      user: {{dbuser}}
+      pwd: {{dbpwd}}
+    rewards:
+      host: {{dbhostrewards}}
+      port: "1433"
+      catalog: rewards
+      user: {{dbuserrewards}}
+      pwd: {{dbpwdrewards}}
     coupons:
       user: {{couponsuser}}
       pwd: {{couponspwd}}
       host: {{couponshost}}
       port: "10255"
       dbName: Coupon
-      collection: CouponCollection
+      collection: CouponCollection   
+    popularproducts:
+      host: {{dbhost}}
+      port: "1433"
+      catalog: popularproducts
+      user: {{dbuser}}
+      pwd: {{dbpwd}}
+    stock:
+      host: {{pghost}}
+      port: "5432"
+      catalog: stockdb
+      user: {{pguser}}
+      pwd: {{pgpwd}}
+    cart:
+      host: {{carthost}}
+      auth: {{cartauth}}
   storage:
     productimages: {{storage}}product-list
     productdetailimages: {{storage}}product-detail
@@ -68,7 +80,7 @@ inf:
     imageclassifierapiurl: http://imageclassifier
     loginapiurl: http://login
   registrationusers:
-    registerusers: {{rewardsregistration}}
+    registerusers: false
     registrationusersurl: http://rewards-registration/UserService.svc
 az:
   productvisitsurl: ""

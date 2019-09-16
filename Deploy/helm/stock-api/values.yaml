@@ -28,8 +28,9 @@ env:
     - name: APPLICATION_INSIGHTS_IKEY
     - name: ISSUER
     - name: SECURITYKEY
-    - name: AUTHKEY
-    - name: HOST
+    - name: sql_server_url
+    - name: sql_user_name
+    - name: sql_user_password
   values: {}
 
 probes:

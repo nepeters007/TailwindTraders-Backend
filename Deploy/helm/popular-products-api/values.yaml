@@ -31,11 +31,15 @@ affinity: {}
 env:
   configmap:
     - name: ApplicationInsightsIK
-    - name: AUTHKEY
-    - name: HOST
+    - name: ConnectionString
     - name: AzureStorageUrl
     - name: ISSUER
     - name: SECURITYKEY
+  configmapinit:
+    - name: dbserver
+    - name: dbuser
+    - name: dbpassword
+    - name: dbcatalog
   values:
     - name: ASPNETCORE_ENVIRONMENT
       value: Development

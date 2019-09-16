@@ -23,9 +23,8 @@ namespace Tailwind.Traders.Product.Api.Infrastructure
         public async Task SeedAsync(ProductContext productContext)
         {
             var contentRootPath = _hostingEnvironment.ContentRootPath;
-            var IsDataBaseCreated = productContext.Database.EnsureCreatedAsync();
 
-            if (IsDataBaseCreated.Result)
+            if (!productContext.ProductItems.Any())
             {
                 var brands = _processFile.Process<ProductBrand>(contentRootPath, "ProductBrands");
                 var types = _processFile.Process<ProductType>(contentRootPath, "ProductTypes");
@@ -40,7 +39,7 @@ namespace Tailwind.Traders.Product.Api.Infrastructure
                 await productContext.ProductItems.AddRangeAsync(products);
 
                 await productContext.SaveChangesAsync();
-           }
+            }
         }
 
         private void Join(IEnumerable<ProductItem> productItems, 
@@ -50,6 +49,9 @@ namespace Tailwind.Traders.Product.Api.Infrastructure
             IEnumerable<ProductTag> tags
             )
         {
+
+
+
             foreach (var productItem in productItems)
             {
                 productItem.Brand = productBrands.FirstOrDefault(brand => brand.Id == productItem.BrandId);
@@ -57,8 +59,7 @@ namespace Tailwind.Traders.Product.Api.Infrastructure
                 productItem.Features = productFeatures.Where(feature => feature.ProductItemId == productItem.Id).ToList();
                 if (productItem.TagId != null )
                 {
-                    productItem.Tag = tags.Where(t => t.Id == productItem.TagId).FirstOrDefault();
-                    //productItem.Tag = tags.SingleOrDefault(t => t.Id == productItem.TagId);
+                    productItem.Tag = tags.SingleOrDefault(t => t.Id == productItem.TagId);
                 }
                 else
                 {

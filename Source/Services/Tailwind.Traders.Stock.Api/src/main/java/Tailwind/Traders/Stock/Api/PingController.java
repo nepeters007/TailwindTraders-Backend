@@ -1,4 +1,4 @@
-package Tailwind.Traders.Stock.Api.controller;
+package Tailwind.Traders.Stock.Api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
